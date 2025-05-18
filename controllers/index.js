@@ -1,11 +1,11 @@
-const helloRoute = (req,res)=>{
-    res.send('Hello');
-}; 
-const EmilyRoute = (req,res)=>{
-    res.send('Emily');
-}; 
+const mongodb = require('../DB/connection');
 
-module.exports = {
- helloRoute,
- EmilyRoute,
+const getData = async (req, res, next) => {
+  const result = await mongodb.getDb().db().collection('user').find();
+  result.toArray().then((lists) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(lists[0]); // we just need the first one (the only one)
+  });
 };
+
+module.exports = { getData };
